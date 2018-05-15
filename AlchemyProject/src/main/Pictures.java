@@ -9,7 +9,7 @@ import javax.swing.ImageIcon;
 
 public class Pictures 
 {
-	private static String earthLocation, fireLocation, waterLocation, airLocation;
+	private static String earthLocation, fireLocation, waterLocation, airLocation, obsidianLocation;
 	private static final String stringStarter = "Images/";
 	private static Image[] images;
 	private static ImageIcon[] originalIcons;
@@ -28,6 +28,7 @@ public class Pictures
 		fireLocation = stringStarter + "fire.png";
 		waterLocation = stringStarter + "water.png";
 		airLocation = stringStarter + "air.png";
+		obsidianLocation = stringStarter + "obsidian.png";
 	}
 	
 	private static void setImages()
@@ -38,8 +39,9 @@ public class Pictures
 			Image fireImg = ImageIO.read(new File(fireLocation));
 			Image waterImg = ImageIO.read(new File(waterLocation));
 			Image airImg = ImageIO.read(new File(airLocation));
+			Image obsidianImg = ImageIO.read(new File(obsidianLocation));
 			
-			Image[] tempArray = {earthImg, fireImg, waterImg, airImg};
+			Image[] tempArray = {earthImg, fireImg, waterImg, airImg, obsidianImg};
 			images = tempArray;
 		}
 		catch(IOException ex)
@@ -54,7 +56,9 @@ public class Pictures
 		ImageIcon fireOIcon = new ImageIcon(images[1]);
 		ImageIcon waterOIcon = new ImageIcon(images[2]);
 		ImageIcon airOIcon = new ImageIcon(images[3]);
-		ImageIcon[] tempArray = {earthOIcon, fireOIcon, waterOIcon, airOIcon};
+		ImageIcon obsidianOIcon = new ImageIcon(images[4]);
+		
+		ImageIcon[] tempArray = {earthOIcon, fireOIcon, waterOIcon, airOIcon, obsidianOIcon};
 		originalIcons = tempArray;
 		scaledIcons = tempArray;
 	}

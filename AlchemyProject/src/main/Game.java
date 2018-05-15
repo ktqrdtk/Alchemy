@@ -1,15 +1,19 @@
 package main;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 
 public class Game
 {
@@ -32,13 +36,15 @@ public class Game
 		frame = new JFrame("Alchemy");
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mainPane = new JPanel(new GridBagLayout())
+		mainPane = new JPanel()
 				{
 					public void paintComponent(Graphics g)
 					{
 						super.paintComponent(g);
+						g.drawImage(Pictures.scaledIcons[4].getImage(), 0, 0, null);
 					}
 				};
+		mainPane.setBackground(new Color(102, 204, 0));
 		
 		ComponentAdapter coAd = new ComponentAdapter()
 				{
@@ -48,31 +54,32 @@ public class Game
 					}
 				};
 		
-		frame.add(mainPane);
+		frame.getContentPane().add(mainPane);
 		frame.getRootPane().addComponentListener(coAd);
-		coAd.componentResized(new ComponentEvent(frame.getRootPane() ,101));
+		coAd.componentResized(new ComponentEvent(frame.getRootPane(), 101));
+		GridBagLayout gbl_mainPane = new GridBagLayout();
+		gbl_mainPane.columnWidths = new int[] {10, 10, 10, 0};
+		gbl_mainPane.rowHeights = new int[]{10, 0};
+		gbl_mainPane.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_mainPane.rowWeights = new double[]{0.0, Double.MIN_VALUE};
+		mainPane.setLayout(gbl_mainPane);
 		
-		GridBagConstraints cs = new GridBagConstraints();
-		cs.gridheight = 10;
-		cs.gridwidth = 10;
-		cs.weightx = 0;
-		cs.weighty = 0.1;
-		
-		cs.gridx = 0;
-		cs.gridy = 0;
-		cs.gridwidth = 6;
-		cs.fill = GridBagConstraints.VERTICAL;
-		JPanel inventoryPane = new JPanel();
-		inventoryPane.setBackground(Color.BLACK);
-		mainPane.add(inventoryPane, cs);
-		
-		cs.gridx = 6;
-		cs.gridy = 0;
-		cs.gridwidth = 3;
-		cs.fill = GridBagConstraints.VERTICAL;
 		JPanel mixingPane = new JPanel();
-		mixingPane.setBackground(Color.RED);
-		mainPane.add(mixingPane, cs);
+		mixingPane.setBackground(Color.BLACK);
+		GridBagConstraints gbc_mixingPane = new GridBagConstraints();
+		gbc_mixingPane.anchor = GridBagConstraints.NORTHWEST;
+		gbc_mixingPane.insets = new Insets(0, 0, 0, 5);
+		gbc_mixingPane.gridx = 1;
+		gbc_mixingPane.gridy = 0;
+		mainPane.add(mixingPane, gbc_mixingPane);
+		JPanel inventoryPane = new JPanel();
+		inventoryPane.setPreferredSize(new Dimension(inventoryPane.getPreferredSize().width, inventoryPane.getPreferredSize().height));
+		inventoryPane.setBackground(Color.BLUE);
+		GridBagConstraints gbc_inventoryPane = new GridBagConstraints();
+		gbc_inventoryPane.anchor = GridBagConstraints.NORTHWEST;
+		gbc_inventoryPane.gridx = 2;
+		gbc_inventoryPane.gridy = 0;
+		mainPane.add(inventoryPane, gbc_inventoryPane);
 		
 		frame.pack();
 		frame.repaint();
@@ -81,6 +88,6 @@ public class Game
 	
 	public int smartSize(Component input)
 	{
-		return 500;
+		return 50;
 	}
 }
