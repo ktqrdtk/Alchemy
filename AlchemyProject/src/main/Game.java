@@ -10,6 +10,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import net.miginfocom.swing.MigLayout;
+import java.awt.Dimension;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import java.awt.FlowLayout;
 
 public class Game
 {
@@ -40,6 +44,7 @@ public class Game
 						g.drawImage(Pictures.scaledIcons[4].getImage(), 0, 0, null);
 					}
 				};
+		mainPanel.setPreferredSize(new Dimension(500, 500));
 		mainPanel.setBackground(Color.YELLOW);
 		
 		ComponentAdapter coAd = new ComponentAdapter()
@@ -52,14 +57,17 @@ public class Game
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
 		frame.getContentPane().add(mainPanel);
 		mainPanel.setLayout(new MigLayout("", "[grow][grow]", "[grow][grow][]"));
+		mainPanel.setLayout(new MigLayout("", "[500px]", "[500px]"));
 		
 		JPanel inventoryPanel = new JPanel();
 		inventoryPanel.setBackground(Color.BLUE);
-		mainPanel.add(inventoryPanel, "cell 1 0,grow");
+		mainPanel.add(inventoryPanel, "cell 0 0,alignx left,aligny top");
 		
 		JPanel mixingPanel = new JPanel();
-		mixingPanel.setBackground(Color.GREEN);
-		mainPanel.add(mixingPanel, "cell 0 0,grow");
+		mixingPanel.setPreferredSize(new Dimension(50, 50));
+		mixingPanel.setBackground(new Color(0, 255, 0));
+		mainPanel.add(mixingPanel, "cell 1 1,alignx right,aligny top");
+		mixingPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		frame.pack();
 		frame.repaint();
 		frame.setVisible(true);
