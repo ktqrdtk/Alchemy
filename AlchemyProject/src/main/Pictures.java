@@ -111,7 +111,7 @@ public class Pictures
 
 	private static Image scaleImageIcon(ImageIcon input, int _1, int _2)
 	{
-		Image returnValue = input.getImage().getScaledInstance(_1, _2, java.awt.Image.SCALE_SMOOTH);
+		Image returnValue = input.getImage().getScaledInstance(_1, _2, java.awt.Image.SCALE_DEFAULT);
 		return returnValue;
 	}
 	

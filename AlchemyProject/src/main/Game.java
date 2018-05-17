@@ -18,8 +18,12 @@ public class Game
 		new Game();
 	}
 	
-	private JFrame frame;
+	private MyJFrame frame;
 	private JPanel mainPanel;
+	public static final double screenMultiplierForImages = .05;
+	public static final int lineWidth = 10;
+	public static final double lineDistanceMultiplier = .9;
+	public static final boolean leftSideInventory = true;
 	
 	public Game()
 	{
@@ -30,7 +34,7 @@ public class Game
 	
 	public void setUpScreen()
 	{
-		frame = new JFrame("Alchemy");
+		frame = new MyJFrame("Alchemy");
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainPanel = new JPanel()
@@ -53,6 +57,8 @@ public class Game
 							Pictures.contentPaneSize.setSize(frame.getContentPane().getSize());
 						}
 						Pictures.setScaledIcons(smartSize(ev.getComponent()), smartSize(ev.getComponent()));
+						frame.revalidate();
+						frame.repaint();
 					}
 				};
 		frame.getRootPane().addComponentListener(coAd);
@@ -75,16 +81,27 @@ public class Game
 		frame.getGlassPane().setVisible(true);
 		frame.setVisible(true);
 		coAd.componentResized(new ComponentEvent(frame.getRootPane(), 101));
+		frame.initInventory(lineDistanceMultiplier, lineWidth, leftSideInventory, frame.getGlassPane().getSize());
+		frame.paintInventory();
 	}
 	
 	public int smartSize(Component input)
 	{
-		return 500;
+		double width = frame.getContentPane().getSize().width;
+		double height = frame.getContentPane().getSize().height;
+		
+		double added = screenMultiplierForImages *(width + height);
+		int average = (int)((added / 2) + .5);
+		
+		
+		return average;
 	}
 	
 	public void glassPanePaint(Graphics g, JComponent glassPane)
 	{
-		g.drawImage(Pictures.scaledIcons[4].getImage(), 0, 0, null);
+		g.drawImage(Pictures.scaledIcons[4].getImage(), 0, 0, null); //background
+		g.setColor(Color.GRAY);
+		g.fillRect((int) (glassPane.getWidth() * lineDistanceMultiplier), 0, lineWidth, glassPane.getHeight());//Line seperating panels, int x, int y, int width, int height
 	}
 	
 	public void mainPanelPaint(Graphics g, JPanel panel)
