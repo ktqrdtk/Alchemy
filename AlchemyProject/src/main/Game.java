@@ -2,20 +2,14 @@ package main;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import java.awt.BorderLayout;
-import net.miginfocom.swing.MigLayout;
-import java.awt.Dimension;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JComponent;
-
-import java.awt.FlowLayout;
 
 public class Game
 {
@@ -29,6 +23,7 @@ public class Game
 	
 	public Game()
 	{
+		Pictures.contentPaneSize = new Dimension(500, 500);
 		Pictures.setUp();
 		setUpScreen();
 	}
@@ -52,26 +47,15 @@ public class Game
 				{
 					public void componentResized(ComponentEvent ev)
 					{
+						if((frame.getContentPane().getSize().height != 0) && 
+								frame.getContentPane().getSize().width != 0)
+						{
+							Pictures.contentPaneSize.setSize(frame.getContentPane().getSize());
+						}
 						Pictures.setScaledIcons(smartSize(ev.getComponent()), smartSize(ev.getComponent()));
 					}
 				};
 		frame.getRootPane().addComponentListener(coAd);
-		coAd.componentResized(new ComponentEvent(frame.getRootPane() ,101));
-		
-		
-		frame.getContentPane().setLayout(new BorderLayout(0, 0));
-		frame.getContentPane().add(mainPanel);
-		mainPanel.setLayout(new MigLayout("", "[grow]", "[grow]"));
-		
-		JPanel inventoryPanel = new JPanel();
-		inventoryPanel.setBackground(Color.BLUE);
-		mainPanel.add(inventoryPanel, "cell 0 0,grow");
-		
-		JPanel mixingPanel = new JPanel();
-		mixingPanel.setBackground(Color.GREEN);
-		mainPanel.add(mixingPanel, "cell 1 0 2 1,grow");
-		mixingPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		
 		frame.setGlassPane(new JComponent()
 				{
 					protected void paintComponent(Graphics g)
@@ -79,25 +63,37 @@ public class Game
 						glassPanePaint(g, this);
 					}
 				});
-		
+		frame.setContentPane(new JComponent()
+				{
+					protected void paintComponent(Graphics g)
+					{
+						contentPanePaint(g, this);
+					}
+				});
 		frame.pack();
 		frame.repaint();
 		frame.getGlassPane().setVisible(true);
 		frame.setVisible(true);
+		coAd.componentResized(new ComponentEvent(frame.getRootPane(), 101));
 	}
 	
 	public int smartSize(Component input)
 	{
-		return 50;
+		return 500;
 	}
 	
 	public void glassPanePaint(Graphics g, JComponent glassPane)
 	{
-		
+		g.drawImage(Pictures.scaledIcons[4].getImage(), 0, 0, null);
 	}
 	
 	public void mainPanelPaint(Graphics g, JPanel panel)
 	{
 		
+	}
+	
+	public void contentPanePaint(Graphics g, JComponent contentPane)
+	{
+		g.drawImage(Pictures.getBackgroundIcon().getImage(), 0, 0, contentPane);
 	}
 }

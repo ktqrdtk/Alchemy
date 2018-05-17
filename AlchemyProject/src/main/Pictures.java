@@ -1,5 +1,6 @@
 package main;
 
+import java.awt.Dimension;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
@@ -9,11 +10,15 @@ import javax.swing.ImageIcon;
 
 public class Pictures 
 {
-	private static String earthLocation, fireLocation, waterLocation, airLocation, obsidianLocation;
+	private static String backgroundLocation, earthLocation, fireLocation, waterLocation, airLocation, obsidianLocation;
 	private static final String stringStarter = "Images/";
 	private static Image[] images;
 	private static ImageIcon[] originalIcons;
 	public static ImageIcon[] scaledIcons;
+	private static Image backgroundImg;
+	private static ImageIcon backgroundOIcon, backgroundIcon;
+	
+	public static Dimension contentPaneSize;
 	
 	public static void setUp()
 	{
@@ -24,6 +29,7 @@ public class Pictures
 	
 	private static void setLocations()
 	{
+		backgroundLocation = stringStarter + "background.png";
 		earthLocation = stringStarter + "earth.png";
 		fireLocation = stringStarter + "fire.png";
 		waterLocation = stringStarter + "water.png";
@@ -40,6 +46,8 @@ public class Pictures
 			Image waterImg = ImageIO.read(new File(waterLocation));
 			Image airImg = ImageIO.read(new File(airLocation));
 			Image obsidianImg = ImageIO.read(new File(obsidianLocation));
+			
+			backgroundImg = ImageIO.read(new File(backgroundLocation));
 			
 			Image[] tempArray = {earthImg, fireImg, waterImg, airImg, obsidianImg};
 			images = tempArray;
@@ -58,9 +66,30 @@ public class Pictures
 		ImageIcon airOIcon = new ImageIcon(images[3]);
 		ImageIcon obsidianOIcon = new ImageIcon(images[4]);
 		
-		ImageIcon[] tempArray = {earthOIcon, fireOIcon, waterOIcon, airOIcon, obsidianOIcon};
-		originalIcons = tempArray;
+		backgroundOIcon = new ImageIcon(backgroundImg);
+		
+		ImageIcon[] tempOArray = {earthOIcon, fireOIcon, waterOIcon, airOIcon, obsidianOIcon};
+		originalIcons = tempOArray;
+		
+		ImageIcon earthIcon = new ImageIcon(images[0]);
+		ImageIcon fireIcon = new ImageIcon(images[1]);
+		ImageIcon waterIcon = new ImageIcon(images[2]);
+		ImageIcon airIcon = new ImageIcon(images[3]);
+		ImageIcon obsidianIcon = new ImageIcon(images[4]);
+		
+		backgroundIcon = new ImageIcon(backgroundImg);
+		
+		ImageIcon[] tempArray = {earthIcon, fireIcon, waterIcon, airIcon, obsidianIcon};
 		scaledIcons = tempArray;
+		
+		for(int i = 0; i < tempArray.length; i++)
+		{
+			if(!(tempArray[i].getImage().equals(tempOArray[i].getImage())))
+			{
+				System.out.println("Set up my code wrong in picture class. Scaled images initial should = original images");
+				throw new NumberFormatException();
+			}
+		}
 	}
 	
 	public static void setScaledIcons(int _1, int _2)
@@ -71,6 +100,8 @@ public class Pictures
 		{
 			scaledIcons[i].setImage(scaleImageIcon(originalIcons[i], new_1, new_2));
 		}
+		
+		backgroundIcon.setImage(scaleImageIcon(backgroundOIcon, contentPaneSize.width, contentPaneSize.height));
 	}
 	
 	private static int smartCast(double input) 
@@ -82,5 +113,10 @@ public class Pictures
 	{
 		Image returnValue = input.getImage().getScaledInstance(_1, _2, java.awt.Image.SCALE_SMOOTH);
 		return returnValue;
+	}
+	
+	public static ImageIcon getBackgroundIcon()
+	{
+		return backgroundIcon;
 	}
 }
