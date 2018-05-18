@@ -73,22 +73,9 @@ public class Game
 		frame.getGlassPane().setVisible(true);
 		frame.setVisible(true);
 		coAd.componentResized(new ComponentEvent(frame.getRootPane(), 101));
-		frame.initInventory(lineDistanceMultiplier, lineWidth, leftSideInventory, frame.getGlassPane().getSize());
+		Item[] tempArray = {new Item(Pictures.FIRE), new Item(Pictures.WATER), new Item(Pictures.EARTH), new Item(Pictures.AIR)};
+		frame.initInventory(lineDistanceMultiplier, lineWidth, leftSideInventory, frame.getGlassPane().getSize(), tempArray);
 		frame.paintInventory();
-	}
-	
-	public static int smartSize(Container input)
-	{
-		return smartSize(input.getSize());
-	}
-	
-	public static int smartSize(Dimension input)
-	{
-		double squared = input.width * input.height;
-		double scaled = squared * screenMultiplierForImages;
-		double imageLength = Math.sqrt(scaled);
-		
-		return (int)(imageLength + .5);
 	}
 	
 	public void glassPanePaint(Graphics g, JComponent glassPane)

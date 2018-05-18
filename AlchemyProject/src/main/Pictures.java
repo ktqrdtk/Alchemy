@@ -1,5 +1,10 @@
 package main;
 
+import java.awt.Container;
+
+//0		1		2	3	4
+//earth fire water air obsidian
+
 import java.awt.Dimension;
 import java.awt.Image;
 import java.io.File;
@@ -10,6 +15,9 @@ import javax.swing.ImageIcon;
 
 public class Pictures 
 {
+	public static final int ITEM_IMAGE_NUM = 5;
+	public static final int EARTH = 0, FIRE = 1, WATER = 2, AIR = 3, OBSIDIAN = 4;
+	
 	private static String backgroundLocation, earthLocation, fireLocation, waterLocation, airLocation, obsidianLocation;
 	private static final String stringStarter = "Images/";
 	private static Image[] images;
@@ -119,5 +127,27 @@ public class Pictures
 	public static ImageIcon getBackgroundIcon()
 	{
 		return backgroundIcon;
+	}
+	
+	public static int smartSize(Container input)
+	{
+		return smartSize(input.getSize());
+	}
+	
+	public static int smartSize(Dimension input)
+	{
+		double squared = input.width * input.height;
+		double scaled = squared * Game.screenMultiplierForImages;
+		double imageLength = Math.sqrt(scaled);
+		
+		int casted = (int)(imageLength + .5);
+		if(casted != 0)
+		{
+			return casted;
+		}
+		else
+		{
+			return -1;
+		}
 	}
 }

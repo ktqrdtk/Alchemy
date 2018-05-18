@@ -29,11 +29,15 @@ public class MyJFrame extends JFrame
 					{
 						if(needsToBeResized)
 						{
-							if(getContentPane().getSize() != null)
+							if(getContentPane().getSize() != null && Pictures.smartSize(getContentPane()) != -1)
 							{
 								Pictures.contentPaneSize.setSize(getContentPane().getSize());
+								Pictures.setScaledIcons(Pictures.smartSize(getContentPane()), Pictures.smartSize(getContentPane()));
+								if(grid != null & grid.items != null)
+								{
+									revalidateItems(1000);
+								}
 							}
-							Pictures.setScaledIcons(Game.smartSize(getContentPane()), Game.smartSize(getContentPane()));
 							revalidate();
 							repaint();
 						}
@@ -44,13 +48,18 @@ public class MyJFrame extends JFrame
 		timer.schedule(resizeRun, 1000, 1000);
 	}
 	
-	public void initInventory(double lineMultiplier, int lineWidth, boolean left, Dimension glassPaneSize)
+	public void initInventory(double lineMultiplier, int lineWidth, boolean left, Dimension glassPaneSize, Item[] items)
 	{
 		this.lineMultiplier = lineMultiplier;
 		this.lineWidth = lineWidth;
 		this.left = left;
 		this.glassPaneSize = glassPaneSize;
 		grid = new Grid(calcInventoryWidthSize(), calcImageSize(), defaultSpacingSize, defaultDistanceFromLine);
+		for(int i = 0; i < items.length; i++)
+		{
+			grid.items.add(items[i]);
+		}
+		grid.addItems();
 	}
 	
 	public void paintInventory() 
@@ -73,6 +82,14 @@ public class MyJFrame extends JFrame
 	
 	public int calcImageSize()
 	{
-		return Game.smartSize(glassPaneSize);
+		return Pictures.smartSize(glassPaneSize);
+	}
+	
+	public void revalidateItems(int wait)
+	{
+		for(int i = 0; i < grid.items.size(); i++)
+		{
+			
+		}
 	}
 }
