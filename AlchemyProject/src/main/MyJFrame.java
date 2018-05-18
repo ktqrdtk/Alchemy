@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -8,16 +9,13 @@ import javax.swing.JFrame;
 
 public class MyJFrame extends JFrame 
 {
-	public static int defaultSpacingSize = 5;
-	public static int defaultDistanceFromLine = 5;
-	
 	public boolean needsToBeResized;
 	private TimerTask resizeRun;
 	
 	private Grid grid;
 	private double lineMultiplier;
 	private int lineWidth;
-	private boolean left;
+	private boolean left, actualStart;
 	private Dimension glassPaneSize;
 	
 	public MyJFrame(String input)
@@ -54,17 +52,12 @@ public class MyJFrame extends JFrame
 		this.lineWidth = lineWidth;
 		this.left = left;
 		this.glassPaneSize = glassPaneSize;
-		grid = new Grid(calcInventoryWidthSize(), calcImageSize(), defaultSpacingSize, defaultDistanceFromLine);
+		grid = new Grid(calcInventoryWidthSize(), calcImageSize(), Game.defaultSpacingSize, Game.defaultDistanceFromLine, left, glassPaneSize, getInsets().top);
 		for(int i = 0; i < items.length; i++)
 		{
 			grid.items.add(items[i]);
 		}
-		grid.addItems();
-	}
-	
-	public void paintInventory() 
-	{
-		
+		revalidateItems(1000);
 	}
 	
 	public int calcInventoryWidthSize()
@@ -87,9 +80,29 @@ public class MyJFrame extends JFrame
 	
 	public void revalidateItems(int wait)
 	{
-		for(int i = 0; i < grid.items.size(); i++)
+		Timer timer = new Timer();
+		TimerTask task = new TimerTask()
+				{
+					public void run()
+					{
+						grid.revalidate();
+						repaint();
+					}
+				};
+		timer.schedule(task, wait);
+	}
+	
+	public void paint(Graphics g)
+	{
+		super.paint(g);
+		if(grid.valid)
 		{
-			
+			for(int i = 0; i < grid.items.size(); i++)
+			{
+				Item curItem = grid.items.get(i);
+				Dimension location = curItem.getLocation();
+				g.drawImage(curItem.getPic().getImage(), location.width, location.height, null);
+			}
 		}
 	}
 }

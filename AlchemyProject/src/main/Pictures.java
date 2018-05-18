@@ -1,9 +1,9 @@
 package main;
 
-import java.awt.Container;
-
 //0		1		2	3	4
 //earth fire water air obsidian
+
+import java.awt.Container;
 
 import java.awt.Dimension;
 import java.awt.Image;

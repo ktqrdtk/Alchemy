@@ -1,8 +1,6 @@
 package main;
 
 import java.awt.Color;
-import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -22,8 +20,10 @@ public class Game
 	private JPanel mainPanel;
 	public static final double screenMultiplierForImages = .001;
 	public static final int lineWidth = 10;
-	public static final double lineDistanceMultiplier = .9;
-	public static final boolean leftSideInventory = false;
+	public static final double lineDistanceMultiplier = .2;
+	public static final boolean leftSideInventory = true;
+	public static final int defaultSpacingSize = 5;
+	public static final int defaultDistanceFromLine = defaultSpacingSize;
 	
 	public Game()
 	{
@@ -34,6 +34,7 @@ public class Game
 	public void setUpScreen()
 	{
 		frame = new MyJFrame("Alchemy");
+		frame.setLayout(null);
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainPanel = new JPanel()
@@ -73,14 +74,13 @@ public class Game
 		frame.getGlassPane().setVisible(true);
 		frame.setVisible(true);
 		coAd.componentResized(new ComponentEvent(frame.getRootPane(), 101));
+		frame.getGlassPane().setPreferredSize(frame.getSize());
 		Item[] tempArray = {new Item(Pictures.FIRE), new Item(Pictures.WATER), new Item(Pictures.EARTH), new Item(Pictures.AIR)};
-		frame.initInventory(lineDistanceMultiplier, lineWidth, leftSideInventory, frame.getGlassPane().getSize(), tempArray);
-		frame.paintInventory();
+		frame.initInventory(lineDistanceMultiplier, lineWidth, leftSideInventory, frame.getGlassPane().getPreferredSize(), tempArray);
 	}
 	
 	public void glassPanePaint(Graphics g, JComponent glassPane)
 	{
-		g.drawImage(Pictures.scaledIcons[4].getImage(), 0, 0, null); //background
 		g.setColor(Color.GRAY);
 		g.fillRect((int) (glassPane.getWidth() * lineDistanceMultiplier), 0, lineWidth, glassPane.getHeight());//Line seperating panels, int x, int y, int width, int height
 	}

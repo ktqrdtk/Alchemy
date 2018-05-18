@@ -1,5 +1,7 @@
 package main;
 
+import java.awt.Dimension;
+
 import javax.swing.ImageIcon;
 
 public class Item
@@ -11,8 +13,8 @@ public class Item
 	public Item(int id)
 	{
 		this.id = id;
-		this.pic = Pictures.scaledIcons[id];
-		x = 0; y = 0; width = 0; height = 0;
+		pic = Pictures.scaledIcons[id];
+		x = 0; y = 0; width = pic.getIconWidth(); height = pic.getIconHeight();
 	}
 	
 	public int getId()
@@ -41,5 +43,10 @@ public class Item
 	{
 		this.width = width;
 		this.height = height;
+	}
+	
+	public Dimension getLocation()
+	{
+		return new Dimension(x, y);
 	}
 }
