@@ -22,6 +22,7 @@ public class Pictures
 	
 	public static void setUp()
 	{
+		contentPaneSize = new Dimension();
 		setLocations();
 		setImages();
 		setOriginalIcons();

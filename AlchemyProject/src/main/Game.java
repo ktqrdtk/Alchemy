@@ -1,7 +1,7 @@
 package main;
 
 import java.awt.Color;
-import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ComponentAdapter;
@@ -20,14 +20,13 @@ public class Game
 	
 	private MyJFrame frame;
 	private JPanel mainPanel;
-	public static final double screenMultiplierForImages = .05;
+	public static final double screenMultiplierForImages = .001;
 	public static final int lineWidth = 10;
 	public static final double lineDistanceMultiplier = .9;
-	public static final boolean leftSideInventory = true;
+	public static final boolean leftSideInventory = false;
 	
 	public Game()
 	{
-		Pictures.contentPaneSize = new Dimension(500, 500);
 		Pictures.setUp();
 		setUpScreen();
 	}
@@ -51,14 +50,7 @@ public class Game
 				{
 					public void componentResized(ComponentEvent ev)
 					{
-						if((frame.getContentPane().getSize().height != 0) && 
-								frame.getContentPane().getSize().width != 0)
-						{
-							Pictures.contentPaneSize.setSize(frame.getContentPane().getSize());
-						}
-						Pictures.setScaledIcons(smartSize(ev.getComponent()), smartSize(ev.getComponent()));
-						frame.revalidate();
-						frame.repaint();
+						frame.needsToBeResized = true;
 					}
 				};
 		frame.getRootPane().addComponentListener(coAd);
@@ -85,16 +77,18 @@ public class Game
 		frame.paintInventory();
 	}
 	
-	public int smartSize(Component input)
+	public static int smartSize(Container input)
 	{
-		double width = frame.getContentPane().getSize().width;
-		double height = frame.getContentPane().getSize().height;
+		return smartSize(input.getSize());
+	}
+	
+	public static int smartSize(Dimension input)
+	{
+		double squared = input.width * input.height;
+		double scaled = squared * screenMultiplierForImages;
+		double imageLength = Math.sqrt(scaled);
 		
-		double added = screenMultiplierForImages *(width + height);
-		int average = (int)((added / 2) + .5);
-		
-		
-		return average;
+		return (int)(imageLength + .5);
 	}
 	
 	public void glassPanePaint(Graphics g, JComponent glassPane)

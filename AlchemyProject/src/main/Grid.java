@@ -2,10 +2,22 @@ package main;
 
 public class Grid 
 {
-	private int widthPixels;
+	private int widthSize, spacingSize, imageSize, imageNumPerRow, distanceFromLine, actualWidthSize, actualImageSize;
 	
-	public void setWidthPixels(int widthPixels)
+	public Grid(int widthSize, int imageSize, int spacingSize, int distanceFromLine)
 	{
-		this.widthPixels = widthPixels;
+		this.widthSize = widthSize;
+		this.imageSize = imageSize;
+		this.spacingSize = spacingSize;
+		this.distanceFromLine = distanceFromLine;
+		calcImageNumPerRow();
+	}
+	
+	public int calcImageNumPerRow()
+	{
+		actualImageSize = imageSize + spacingSize;
+		actualWidthSize = widthSize - distanceFromLine;
+		imageNumPerRow = (int)((actualWidthSize)/ actualImageSize);
+		return imageNumPerRow;
 	}
 }
