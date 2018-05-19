@@ -1,6 +1,6 @@
 package main;
 
-import java.awt.Dimension;
+import java.awt.Point;
 
 import javax.swing.ImageIcon;
 
@@ -8,13 +8,13 @@ public class Item
 {
 	private int id;
 	private ImageIcon pic;
-	int x, y, width, height;
+	private int x, y;
 	
 	public Item(int id)
 	{
 		this.id = id;
 		pic = Pictures.scaledIcons[id];
-		x = 0; y = 0; width = pic.getIconWidth(); height = pic.getIconHeight();
+		x = 0; y = 0;
 	}
 	
 	public int getId()
@@ -39,14 +39,25 @@ public class Item
 		this.y = y;
 	}
 	
-	public void setSize(int width, int height)
+	public Point getLocation()
 	{
-		this.width = width;
-		this.height = height;
+		return new Point(x, y);
 	}
-	
-	public Dimension getLocation()
+
+	public double distanceFrom(Point input)
 	{
-		return new Dimension(x, y);
+		double actX = x + (.5 * pic.getIconWidth());
+		double actY = y + (.5 * pic.getIconHeight());
+		double xDis = actX - input.x;
+		double yDis = actY - input.y;
+		double xSqu = xDis * xDis;
+		double ySqu = yDis * yDis;
+		double added = xSqu + ySqu;
+		return Math.sqrt(added);
+	}
+
+	public double getRadius()
+	{
+		return distanceFrom(new Point(x ,y));
 	}
 }

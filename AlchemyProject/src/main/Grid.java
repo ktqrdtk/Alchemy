@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.Dimension;
+import java.awt.Point;
 import java.util.ArrayList;
 
 public class Grid 
@@ -42,10 +43,9 @@ public class Grid
 		for(int i = 0; i < items.size(); i++)
 		{
 			Item curItem = items.get(i);
-			//using Dimension as a coordinate because im lazy and dont want to make a new class
-			Dimension coord = getLocation(i, left);
-			int x = coord.width;
-			int y = coord.height;
+			Point coord = getLocation(i, left);
+			int x = coord.x;
+			int y = coord.y;
 			if(x == -1 || y == -1)
 			{
 				return;
@@ -60,10 +60,10 @@ public class Grid
 		validate();
 	}
 	
-	public Dimension getLocation(int input, boolean left)
+	public Point getLocation(int input, boolean left)
 	{
 		int startingPoint = (int)((Game.lineDistanceMultiplier * glassPaneSize.width) + .5);
-		Dimension returnValue = new Dimension(-1, -1);
+		Point returnValue = new Point(-1, -1);
 		int xNumOfImages = xNumOfImages(input);
 		int yNumOfImages = yNumOfImages(input);
 		
@@ -95,7 +95,7 @@ public class Grid
 			//dont know why this needs to be here, but it works so leave it vvvvv
 			countAwayFromStartingPointX -= imageSize + spacingSize;
 		}
-		returnValue.setSize(countAwayFromStartingPointX, countAwayFromStartingPointY);
+		returnValue.setLocation(countAwayFromStartingPointX, countAwayFromStartingPointY);
 		return returnValue;
 	}
 	
