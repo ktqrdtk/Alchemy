@@ -6,16 +6,15 @@ import java.util.ArrayList;
 
 public class Grid 
 {
-	private int widthSize, spacingSize, imageSize, imageNumPerRow, distanceFromLine, actualWidthSize, actualImageSize, topInset;
+	private int widthSize, spacingSize, imageSize, imageNumPerRow, distanceFromLine, actualWidthSize, actualImageSize;
 	private boolean left;
 	private Dimension glassPaneSize;
 	public ArrayList<Item> items;
 	public boolean valid;
 	
-	public Grid(int widthSize, int imageSize, int spacingSize, int distanceFromLine, boolean left, Dimension glassPaneSize, int topInset)
+	public Grid(int widthSize, int imageSize, int spacingSize, int distanceFromLine, boolean left, Dimension glassPaneSize)
 	{
 		valid = false;
-		this.topInset = topInset;
 		this.widthSize = widthSize;
 		this.imageSize = imageSize;
 		this.spacingSize = spacingSize;
@@ -50,7 +49,7 @@ public class Grid
 			{
 				return;
 			}
-			curItem.setCoord(x, y);
+			curItem.setLocation(x, y);
 			valid = true;
 		}
 	}
@@ -86,7 +85,6 @@ public class Grid
 		int countAwayFromStartingPointY = 0;
 		countAwayFromStartingPointY += spacingSize;
 		countAwayFromStartingPointY += yNumOfImages * (imageSize + spacingSize);
-		countAwayFromStartingPointY += topInset;
 		
 		countAwayFromStartingPointX *= negOrNot;
 		countAwayFromStartingPointX += startingPoint;

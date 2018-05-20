@@ -22,7 +22,7 @@ public class Game
 	public static final int lineWidth = 10;
 	public static final double lineDistanceMultiplier = .2;
 	public static final boolean leftSideInventory = true;
-	public static final int defaultSpacingSize = 5;
+	public static final int defaultSpacingSize = 2;
 	public static final int defaultDistanceFromLine = defaultSpacingSize;
 	
 	public Game()
@@ -75,7 +75,7 @@ public class Game
 		frame.setVisible(true);
 		coAd.componentResized(new ComponentEvent(frame.getRootPane(), 101));
 		frame.getGlassPane().setPreferredSize(frame.getSize());
-		Item[] tempArray = {new Item(Pictures.FIRE), new Item(Pictures.WATER), new Item(Pictures.EARTH), new Item(Pictures.AIR)};
+		Item[] tempArray = {new Item(frame, Pictures.FIRE, true), new Item(frame, Pictures.WATER, true), new Item(frame, Pictures.EARTH, true), new Item(frame, Pictures.AIR, true)};
 		frame.initInventory(lineDistanceMultiplier, lineWidth, leftSideInventory, frame.getGlassPane().getPreferredSize(), tempArray);
 	}
 	

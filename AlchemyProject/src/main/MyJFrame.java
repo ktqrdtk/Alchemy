@@ -2,6 +2,7 @@ package main;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -18,14 +19,14 @@ public class MyJFrame extends JFrame implements MouseListener
 	private Grid grid;
 	private double lineMultiplier;
 	private int lineWidth;
-	private boolean left, paintSelectedItem, repaintAlways;
+	private boolean left;
 	private Dimension glassPaneSize;
-	private Item selectedItem;
+	public Item selectedItem;
+	public boolean paintSelected;
 	
 	public MyJFrame(String input)
 	{
 		super(input);
-		repaintAlways = false;
 		resizeRun = new TimerTask()
 				{
 					public void run()
@@ -38,15 +39,14 @@ public class MyJFrame extends JFrame implements MouseListener
 								Pictures.setScaledIcons(Pictures.smartSize(getContentPane()), Pictures.smartSize(getContentPane()));
 								if(grid != null & grid.items != null)
 								{
-									revalidateItems(1000);
+									grid.revalidate();
 								}
 							}
 							revalidate();
 							repaint();
 						}
 						needsToBeResized = false;
-						
-						if(repaintAlways)
+						if(paintSelected)
 						{
 							repaint();
 						}
@@ -54,6 +54,7 @@ public class MyJFrame extends JFrame implements MouseListener
 				};
 		Timer timer = new Timer();
 		timer.schedule(resizeRun, 1000, 100);
+		addMouseListener(this);
 	}
 	
 	public void initInventory(double lineMultiplier, int lineWidth, boolean left, Dimension glassPaneSize, Item[] items)
@@ -62,13 +63,16 @@ public class MyJFrame extends JFrame implements MouseListener
 		this.lineWidth = lineWidth;
 		this.left = left;
 		this.glassPaneSize = glassPaneSize;
-		grid = new Grid(calcInventoryWidthSize(), calcImageSize(), Game.defaultSpacingSize, Game.defaultDistanceFromLine, left, glassPaneSize, getInsets().top);
+		grid = new Grid(calcInventoryWidthSize(), calcImageSize(), Game.defaultSpacingSize, Game.defaultDistanceFromLine, left, glassPaneSize);
 		for(int i = 0; i < items.length; i++)
 		{
 			grid.items.add(items[i]);
 		}
-		revalidateItems(1000);
-		enableMouse();
+		grid.revalidate();
+		for(int i = 0; i < grid.items.size(); i++)
+		{
+			add(grid.items.get(i));
+		}
 	}
 	
 	public int calcInventoryWidthSize()
@@ -89,72 +93,16 @@ public class MyJFrame extends JFrame implements MouseListener
 		return Pictures.smartSize(glassPaneSize);
 	}
 	
-	public void revalidateItems(int wait)
-	{
-		Timer timer = new Timer();
-		TimerTask task = new TimerTask()
-				{
-					public void run()
-					{
-						grid.revalidate();
-						repaint();
-					}
-				};
-		timer.schedule(task, wait);
-	}
-	
 	public void paint(Graphics g)
 	{
 		super.paint(g);
-		
-		//item paint
-		if(grid.valid)
+		if(paintSelected)
 		{
-			for(int i = 0; i < grid.items.size(); i++)
-			{
-				Item curItem = grid.items.get(i);
-				Point location = curItem.getLocation();
-				g.drawImage(curItem.getPic().getImage(), location.x, location.y, null);
-			}
+			selectedItem.setLocation(MouseInfo.getPointerInfo().getLocation());
+			System.out.println(selectedItem.getLocation());
+			selectedItem.paint(g);
+			g.drawString("ADSDF", 0, 0);
 		}
-		
-		//mouse painting if holding item
-		if(paintSelectedItem && selectedItem != null)
-		{
-			g.drawImage(selectedItem.getPic().getImage(), getMousePosition().x - (selectedItem.getPic().getIconWidth() / 2), getMousePosition().y - (selectedItem.getPic().getIconHeight() / 2), null);
-		}
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent input)
-	{
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent input)
-	{
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent input)
-	{
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent input)
-	{
-		selectedItem = getItemAt(input.getPoint());
-		grabSelectedItem();
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent input)
-	{	
-		//dropSelectedItem(input);
-		selectedItem = null;
 	}
 	
 	public Item getItemAt(Point input)
@@ -201,15 +149,42 @@ public class MyJFrame extends JFrame implements MouseListener
 			return false;
 		}
 	}
-	
-	public void enableMouse()
-	{
-		addMouseListener(this);
+
+	@Override
+	public void mouseClicked(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
-	
-	public void grabSelectedItem()
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0)
 	{
-		paintSelectedItem = true;
-		repaintAlways = true;
+		if(!inInventory(MouseInfo.getPointerInfo().getLocation()))
+		{
+			Item newItem = new Item(this, selectedItem.getId(), true);
+			newItem.setLocation(MouseInfo.getPointerInfo().getLocation());
+			add(newItem);
+		}
+		System.out.println("FALSE");
+		paintSelected = false;
+		selectedItem = null;
 	}
 }
