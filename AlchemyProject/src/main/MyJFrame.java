@@ -105,7 +105,6 @@ public class MyJFrame extends JFrame implements MouseListener
 		{
 			if(input.x < lineMultiplier * glassPaneSize.width)
 			{
-				System.out.println(true);
 				return true;
 			}
 			return false;
@@ -153,7 +152,7 @@ public class MyJFrame extends JFrame implements MouseListener
 			Item newItem = new Item(this, selectedItem.getId(), true);
 			newItem.setLocation(MouseInfo.getPointerInfo().getLocation());
 			add(newItem);
-			System.out.println("Actually Added: " + newItem);
+			System.out.println("Actually Added: " + newItem + " ID: " + newItem.getId() + " totalNum: " + Item.totalItemNum);
 		}
 		selectedItem = null;
 		repaint();

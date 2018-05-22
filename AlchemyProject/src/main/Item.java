@@ -17,6 +17,7 @@ public class Item extends JComponent implements MouseListener
 	private ImageIcon pic;
 	private int x, y;
 	public boolean clickable;
+	public static int totalItemNum = 0;
 	
 	public Item(MyJFrame frame, int id, boolean clickable)
 	{
@@ -30,6 +31,7 @@ public class Item extends JComponent implements MouseListener
 		{
 			addMouseListener(this);
 		}
+		totalItemNum++;
 	}
 	
 	public int getId()
@@ -102,10 +104,10 @@ public class Item extends JComponent implements MouseListener
 		if(clickable)
 		{
 			Item newItem = new Item(frame, id, false);
-			Point absolutePos = MouseInfo.getPointerInfo().getLocation();
-			newItem.setLocation();
+			totalItemNum--;
+			newItem.setLocation(MouseInfo.getPointerInfo().getLocation());
 			frame.selectedItem = newItem;
-			frame.add(frame.selectedItem);
+			frame.add(newItem);
 		}
 	}
 
@@ -123,5 +125,10 @@ public class Item extends JComponent implements MouseListener
 		//accounts for frame's offset
 		input.translatePoint(-1 * frame.getLocation().x, -1 * frame.getLocation().y);
 		frame.getMouseListeners()[0].mouseReleased(input);
+	}
+	
+	public String toString()
+	{
+		return super.toString() + " id: " + id;
 	}
 }
