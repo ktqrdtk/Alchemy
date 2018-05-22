@@ -22,7 +22,6 @@ public class MyJFrame extends JFrame implements MouseListener
 	private boolean left;
 	private Dimension glassPaneSize;
 	public Item selectedItem;
-	public boolean paintSelected;
 	
 	public MyJFrame(String input)
 	{
@@ -46,14 +45,16 @@ public class MyJFrame extends JFrame implements MouseListener
 							repaint();
 						}
 						needsToBeResized = false;
-						if(paintSelected)
+						if(selectedItem != null)
 						{
+							selectedItem.setLocation(MouseInfo.getPointerInfo().getLocation());
+							revalidate();
 							repaint();
 						}
 					}
 				};
 		Timer timer = new Timer();
-		timer.schedule(resizeRun, 1000, 100);
+		timer.schedule(resizeRun, 1000, 17);
 		addMouseListener(this);
 	}
 	
@@ -96,38 +97,6 @@ public class MyJFrame extends JFrame implements MouseListener
 	public void paint(Graphics g)
 	{
 		super.paint(g);
-		if(paintSelected)
-		{
-			selectedItem.setLocation(MouseInfo.getPointerInfo().getLocation());
-			System.out.println(selectedItem.getLocation());
-			selectedItem.paint(g);
-			g.drawString("ADSDF", 0, 0);
-		}
-	}
-	
-	public Item getItemAt(Point input)
-	{
-		if(inInventory(input))
-		{
-			Item closestItem = grid.items.get(0);
-			for(int i = 0; i < grid.items.size(); i++)
-			{
-				Item curItem = grid.items.get(i);
-				if(curItem.distanceFrom(input) < closestItem.distanceFrom(input))
-				{
-					closestItem = curItem;
-				}
-			}
-			if(closestItem.distanceFrom(input) > closestItem.getRadius())
-			{
-				return null;
-			}
-			return closestItem;
-		}
-		else
-		{
-			return null;
-		}
 	}
 	
 	public boolean inInventory(Point input)
@@ -183,8 +152,7 @@ public class MyJFrame extends JFrame implements MouseListener
 			newItem.setLocation(MouseInfo.getPointerInfo().getLocation());
 			add(newItem);
 		}
-		System.out.println("FALSE");
-		paintSelected = false;
 		selectedItem = null;
+		repaint();
 	}
 }

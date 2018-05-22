@@ -104,7 +104,7 @@ public class Item extends JComponent implements MouseListener
 			Item newItem = new Item(frame, id, false);
 			newItem.setLocation(MouseInfo.getPointerInfo().getLocation());
 			frame.selectedItem = newItem;
-			frame.paintSelected = true;
+			frame.add(frame.selectedItem);
 		}
 	}
 
