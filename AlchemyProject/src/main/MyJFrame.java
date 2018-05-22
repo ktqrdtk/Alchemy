@@ -105,6 +105,7 @@ public class MyJFrame extends JFrame implements MouseListener
 		{
 			if(input.x < lineMultiplier * glassPaneSize.width)
 			{
+				System.out.println(true);
 				return true;
 			}
 			return false;
@@ -120,37 +121,39 @@ public class MyJFrame extends JFrame implements MouseListener
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+	public void mouseClicked(MouseEvent input) {
+		//  Auto-generated method stub
 		
 	}
 
 	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+	public void mouseEntered(MouseEvent input) {
+		//  Auto-generated method stub
 		
 	}
 
 	@Override
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+	public void mouseExited(MouseEvent input) {
+		//  Auto-generated method stub
 		
 	}
 
 	@Override
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+	public void mousePressed(MouseEvent input) {
+		//  Auto-generated method stub
 		
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent arg0)
+	public void mouseReleased(MouseEvent input)
 	{
-		if(!inInventory(MouseInfo.getPointerInfo().getLocation()))
+		System.out.println("inventory:" + inInventory(input.getPoint()) + " selecetedItem: " + selectedItem);
+		if(!inInventory(input.getPoint())  && selectedItem != null)
 		{
 			Item newItem = new Item(this, selectedItem.getId(), true);
 			newItem.setLocation(MouseInfo.getPointerInfo().getLocation());
 			add(newItem);
+			System.out.println("Actually Added: " + newItem);
 		}
 		selectedItem = null;
 		repaint();

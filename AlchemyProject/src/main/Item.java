@@ -102,7 +102,8 @@ public class Item extends JComponent implements MouseListener
 		if(clickable)
 		{
 			Item newItem = new Item(frame, id, false);
-			newItem.setLocation(MouseInfo.getPointerInfo().getLocation());
+			Point absolutePos = MouseInfo.getPointerInfo().getLocation();
+			newItem.setLocation();
 			frame.selectedItem = newItem;
 			frame.add(frame.selectedItem);
 		}
@@ -111,6 +112,16 @@ public class Item extends JComponent implements MouseListener
 	@Override
 	public void mouseReleased(MouseEvent input)
 	{
+		input.setSource(frame);
+		
+		//resets point to 0
+		input.translatePoint(-input.getX(), -input.getY());
+		
+		//sets it to mouse pos
+		input.translatePoint(MouseInfo.getPointerInfo().getLocation().x, MouseInfo.getPointerInfo().getLocation().y);
+		
+		//accounts for frame's offset
+		input.translatePoint(-1 * frame.getLocation().x, -1 * frame.getLocation().y);
 		frame.getMouseListeners()[0].mouseReleased(input);
 	}
 }
