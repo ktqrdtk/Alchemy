@@ -146,13 +146,11 @@ public class MyJFrame extends JFrame implements MouseListener
 	@Override
 	public void mouseReleased(MouseEvent input)
 	{
-		System.out.println("inventory:" + inInventory(input.getPoint()) + " selecetedItem: " + selectedItem);
 		if(!inInventory(input.getPoint())  && selectedItem != null)
 		{
 			Item newItem = new Item(this, selectedItem.getId(), true);
 			newItem.setLocation(MouseInfo.getPointerInfo().getLocation());
 			add(newItem);
-			newItem.paint(newItem.getGraphics());
 			System.out.println("Actually Added: " + newItem + " ID: " + newItem.getId() + " totalNum: " + Item.totalItemNum + " location: " + newItem.getLocation());
 		}
 		selectedItem = null;

@@ -20,7 +20,7 @@ public class Game
 	private JPanel mainPanel;
 	public static final double screenMultiplierForImages = .001;
 	public static final int lineWidth = 10;
-	public static final double lineDistanceMultiplier = .1;
+	public static final double lineDistanceMultiplier = .2;
 	public static final boolean leftSideInventory = true;
 	public static final int defaultSpacingSize = 2;
 	public static final int defaultDistanceFromLine = defaultSpacingSize;
