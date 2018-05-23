@@ -152,7 +152,8 @@ public class MyJFrame extends JFrame implements MouseListener
 			Item newItem = new Item(this, selectedItem.getId(), true);
 			newItem.setLocation(MouseInfo.getPointerInfo().getLocation());
 			add(newItem);
-			System.out.println("Actually Added: " + newItem + " ID: " + newItem.getId() + " totalNum: " + Item.totalItemNum);
+			newItem.paint(newItem.getGraphics());
+			System.out.println("Actually Added: " + newItem + " ID: " + newItem.getId() + " totalNum: " + Item.totalItemNum + " location: " + newItem.getLocation());
 		}
 		selectedItem = null;
 		repaint();
