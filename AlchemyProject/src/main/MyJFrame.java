@@ -156,4 +156,13 @@ public class MyJFrame extends JFrame implements MouseListener
 		selectedItem = null;
 		repaint();
 	}
+	
+	public void setCorrectBounds()
+	{
+		for(int i = 0; i < grid.items.size(); i++)
+		{
+			Item curItem = grid.items.get(i);
+			curItem.setBounds(curItem.getBounds().x, curItem.getBounds().y, calcImageSize(), calcImageSize());
+		}
+	}
 }

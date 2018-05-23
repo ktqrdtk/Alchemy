@@ -109,7 +109,6 @@ public class Pictures
 		{
 			scaledIcons[i].setImage(scaleImageIcon(originalIcons[i], new_1, new_2));
 		}
-		
 		backgroundIcon.setImage(scaleImageIcon(backgroundOIcon, contentPaneSize.width, contentPaneSize.height));
 	}
 	
