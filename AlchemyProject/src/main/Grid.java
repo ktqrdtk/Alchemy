@@ -47,6 +47,7 @@ public class Grid
 			int y = coord.y;
 			if(x == -1 || y == -1)
 			{
+				System.out.println("Invalid Location: grid validate method.");
 				return;
 			}
 			curItem.setLocation(x, y);
@@ -119,4 +120,15 @@ public class Grid
 		return returnValue;
 	}
 	
+	public boolean containsNum(int input)
+	{
+		for(int i = 0; i < items.size(); i++)
+		{
+			if(input == items.get(i).getId())
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 }

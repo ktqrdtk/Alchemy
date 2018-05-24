@@ -6,6 +6,10 @@ import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -185,9 +189,9 @@ public class MyJFrame extends JFrame implements MouseListener
 		for(int i = 0; i < activeItems.size(); i++)
 		{
 			Item curItem = activeItems.get(i);
-			if(!input.equals(curItem))
+			if(input.getNum() != curItem.getNum())
 			{
-				if(input.contains(curItem.getLocation()))
+				if(input.actuallyContains(curItem))
 				{
 					cross(curItem, input);
 					return;
@@ -210,6 +214,57 @@ public class MyJFrame extends JFrame implements MouseListener
 	
 	public void cross(Item item1, Item item2)
 	{
-		// TODO
+		int newItemId = getMixId(item1.getId(), item2.getId());
+		Item newItem = new Item(this, newItemId, true);
+		if(!grid.containsNum(newItemId))
+		{
+			grid.items.add(newItem);
+			grid.revalidate();
+			for(int i = 0; i < grid.items.size(); i++)
+			{
+				try
+				{
+					remove(grid.items.get(i));
+				}
+				catch(Exception ex)
+				{
+					
+				}
+				add(grid.items.get(i));
+			}
+			revalidate();
+			repaint();
+		}
+		
+		activeItems.remove(item1);
+		activeItems.remove(item2);
+		remove(item1);
+		remove(item2);
+		Item adderItem = new Item(this, newItemId, true);
+		adderItem.setLocation(item1.getLocation());
+		add(adderItem);
+		activeItems.add(adderItem);
+	}
+	
+	public int getMixId(int id1, int id2)
+	{
+		InputStream in = getClass().getResourceAsStream("/file.txt"); 
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		String recipes = "";
+		String line;
+		try {
+			while((line = reader.readLine()) != null)
+			{
+				recipes += line;
+			}
+		}
+		catch (IOException e)
+		{
+			System.out.println("Recipes folder does not exist");
+		}
+		
+		char[] recipesArray = recipes.toCharArray();
+		
+		for(int i = 0; i < )
 	}
 }

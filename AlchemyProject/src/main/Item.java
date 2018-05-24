@@ -20,6 +20,8 @@ public class Item extends JComponent implements MouseListener
 	private int idNum;
 	private int actualSize;
 	public static int totalItemNum = 0;
+	public static int allowedCombineDistance = 10;
+	public static final boolean changeAllowedCombineDistanceToActualSize = false;
 	
 	public Item(MyJFrame frame, int id, boolean clickable)
 	{
@@ -168,5 +170,44 @@ public class Item extends JComponent implements MouseListener
 	public void setNum(int num)
 	{
 		idNum = num;
+	}
+	
+	public boolean actuallyContains(Item input)
+	{
+		if(closeTo(input.getLocation().x + (.5 * actualSize), true) && closeTo(input.getLocation().y + (.5 * actualSize), false))
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean closeTo(double input, boolean x)
+	{
+		updateActualSize();
+		if(changeAllowedCombineDistanceToActualSize)
+		{
+			allowedCombineDistance = actualSize;
+		}
+		double value;
+		if(x)
+		{
+			value = getLocation().x + (.5 * actualSize);
+		}
+		else
+		{
+			value = getLocation().y + (.5 * actualSize);
+		}
+		
+		double distance = value - input;
+		if(distance < 0)
+		{
+			distance *= -1;
+		}
+		
+		if(distance < allowedCombineDistance)
+		{
+			return true;
+		}
+		return false;
 	}
 }
