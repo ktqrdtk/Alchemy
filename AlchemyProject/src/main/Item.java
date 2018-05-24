@@ -112,12 +112,20 @@ public class Item extends JComponent implements MouseListener
 	{
 		if(clickable)
 		{
-			Item newItem = new Item(frame, id, false);
-			totalItemNum--;
-			updateActualSize();
-			newItem.setLocation(new Point((int)(MouseInfo.getPointerInfo().getLocation().x - (.5 * actualSize)), (int)(MouseInfo.getPointerInfo().getLocation().y - (.5 * actualSize))));
-			frame.selectedItem = newItem;
-			frame.add(newItem);
+			if(frame.inInventory(getLocation()))
+			{
+				Item newItem = new Item(frame, id, false);
+				totalItemNum--;
+				updateActualSize();
+				newItem.setLocation(new Point((int)(MouseInfo.getPointerInfo().getLocation().x - (.5 * actualSize)), (int)(MouseInfo.getPointerInfo().getLocation().y - (.5 * actualSize))));
+				frame.selectedItem = newItem;
+				frame.add(newItem);
+			}
+			else
+			{
+				setLocation(new Point((int)(MouseInfo.getPointerInfo().getLocation().x - (.5 * actualSize)), (int)(MouseInfo.getPointerInfo().getLocation().y - (.5 * actualSize))));
+				frame.selectedItem = this;
+			}
 		}
 	}
 
@@ -145,6 +153,20 @@ public class Item extends JComponent implements MouseListener
 	public void updateActualSize()
 	{
 		actualSize = frame.calcImageSize();
-		System.out.println(actualSize);
+	}
+	
+	public int getActualSize()
+	{
+		return actualSize;
+	}
+	
+	public int getNum()
+	{
+		return idNum;
+	}
+
+	public void setNum(int num)
+	{
+		idNum = num;
 	}
 }

@@ -6,6 +6,7 @@ import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -21,6 +22,7 @@ public class MyJFrame extends JFrame implements MouseListener
 	private int lineWidth;
 	private boolean left;
 	private Dimension glassPaneSize;
+	private ArrayList<Item> activeItems;
 	public Item selectedItem;
 	
 	public MyJFrame(String input)
@@ -47,7 +49,7 @@ public class MyJFrame extends JFrame implements MouseListener
 						needsToBeResized = false;
 						if(selectedItem != null)
 						{
-							selectedItem.setLocation(MouseInfo.getPointerInfo().getLocation());
+							selectedItem.setLocation(new Point((int)(MouseInfo.getPointerInfo().getLocation().x - (.5 * selectedItem.getActualSize())), (int)(MouseInfo.getPointerInfo().getLocation().y - (.5 * selectedItem.getActualSize()))));
 							revalidate();
 							repaint();
 						}
@@ -55,6 +57,7 @@ public class MyJFrame extends JFrame implements MouseListener
 				};
 		Timer timer = new Timer();
 		timer.schedule(resizeRun, 1000, 17);
+		activeItems = new ArrayList<Item>();
 		addMouseListener(this);
 	}
 	
@@ -149,9 +152,20 @@ public class MyJFrame extends JFrame implements MouseListener
 		if(!inInventory(input.getPoint())  && selectedItem != null)
 		{
 			Item newItem = new Item(this, selectedItem.getId(), true);
-			newItem.setLocation(MouseInfo.getPointerInfo().getLocation());
+			newItem.setLocation(new Point((int)(MouseInfo.getPointerInfo().getLocation().x - (.5 * newItem.getActualSize())), (int)(MouseInfo.getPointerInfo().getLocation().y - (.5 * newItem.getActualSize()))));
+			newItem.setNum(selectedItem.getNum());
 			add(newItem);
-			System.out.println("Actually Added: " + newItem + " ID: " + newItem.getId() + " totalNum: " + Item.totalItemNum + " location: " + newItem.getLocation());
+			if(!containsNumber(selectedItem.getNum(), activeItems))
+			{
+				activeItems.add(newItem);
+			}
+			maybeCrossed(newItem);
+			remove(selectedItem);
+		}
+		else if(selectedItem != null)
+		{
+			activeItems.remove(selectedItem);
+			remove(selectedItem);
 		}
 		selectedItem = null;
 		repaint();
@@ -164,5 +178,38 @@ public class MyJFrame extends JFrame implements MouseListener
 			Item curItem = grid.items.get(i);
 			curItem.setBounds(curItem.getBounds().x, curItem.getBounds().y, calcImageSize(), calcImageSize());
 		}
+	}
+	
+	public void maybeCrossed(Item input)
+	{
+		for(int i = 0; i < activeItems.size(); i++)
+		{
+			Item curItem = activeItems.get(i);
+			if(!input.equals(curItem))
+			{
+				if(input.contains(curItem.getLocation()))
+				{
+					cross(curItem, input);
+					return;
+				}
+			}
+		}
+	}
+	
+	public boolean containsNumber(int num, ArrayList<Item> list)
+	{
+		for(int i = 0; i < list.size(); i++)
+		{
+			if(num == list.get(i).getNum())
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public void cross(Item item1, Item item2)
+	{
+		// TODO
 	}
 }
