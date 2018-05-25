@@ -6,7 +6,7 @@ public class Recipe
 {
 	private static ArrayList<Recipe> recipeList = new ArrayList<Recipe>();
 	private boolean real;
-	private int ing1, ing2, result;
+	private int ing1, ing2, result = -1;
 	
 	public Recipe(String input1, String input2)
 	{
@@ -31,13 +31,14 @@ public class Recipe
 		ing1 = id1;
 		ing2 = id2;
 		result = id3;
+		recipeList.add(this);
 	}
 	
-	public boolean exists()
+	public int getResult()
 	{
 		if(real)
 		{
-			return true;
+			return result;
 		}
 		else
 		{
@@ -45,10 +46,10 @@ public class Recipe
 			{
 				if(ingMatch(recipeList.get(i)))
 				{
-					return true;
+					return recipeList.get(i).result;
 				}
 			}
-			return false;
+			return -1;
 		}
 	}
 	
@@ -67,5 +68,18 @@ public class Recipe
 		return true;
 	}
 	
-	public static 
+	public String toString()
+	{
+		return ing1 + " + " + ing2 + " = " + result;
+	}
+	
+	public static Recipe getRecipe(int index)
+	{
+		return recipeList.get(index);
+	}
+	
+	public static int listLength()
+	{
+		return recipeList.size();
+	}
 }

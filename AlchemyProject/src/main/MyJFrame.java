@@ -216,48 +216,51 @@ public class MyJFrame extends JFrame implements MouseListener
 	public void cross(Item item1, Item item2)
 	{
 		int newItemId = getMixId(item1.getId(), item2.getId());
-		Item newItem = new Item(this, newItemId, true);
-		if(!grid.containsNum(newItemId))
+		if(newItemId != -1)
 		{
-			grid.items.add(newItem);
-			grid.revalidate();
-			for(int i = 0; i < grid.items.size(); i++)
+			Item newItem = new Item(this, newItemId, true);
+			if(!grid.containsNum(newItemId))
 			{
-				try
+				grid.items.add(newItem);
+				grid.revalidate();
+				for(int i = 0; i < grid.items.size(); i++)
 				{
-					remove(grid.items.get(i));
+					try
+					{
+						remove(grid.items.get(i));
+					}
+					catch(Exception ex)
+					{
+						
+					}
+					add(grid.items.get(i));
 				}
-				catch(Exception ex)
-				{
-					
-				}
-				add(grid.items.get(i));
+				revalidate();
+				repaint();
 			}
-			revalidate();
-			repaint();
+			
+			activeItems.remove(item1);
+			activeItems.remove(item2);
+			remove(item1);
+			remove(item2);
+			Item adderItem = new Item(this, newItemId, true);
+			adderItem.setLocation(item1.getLocation());
+			add(adderItem);
+			activeItems.add(adderItem);
 		}
-		
-		activeItems.remove(item1);
-		activeItems.remove(item2);
-		remove(item1);
-		remove(item2);
-		Item adderItem = new Item(this, newItemId, true);
-		adderItem.setLocation(item1.getLocation());
-		add(adderItem);
-		activeItems.add(adderItem);
 	}
 	
 	public void initRecipes()
 	{
 		InputStream in = getClass().getResourceAsStream("/Recipes.txt"); 
 		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-		String recipes = "";
-		String line;
-		try {
+		String line = "";
+		ArrayList<String> lines = new ArrayList<>();
+		try
+		{
 			while((line = reader.readLine()) != null)
 			{
-				recipes += line;
-				recipes += ';';
+				lines.add(line);
 			}
 		}
 		catch (IOException e)
@@ -265,27 +268,68 @@ public class MyJFrame extends JFrame implements MouseListener
 			System.out.println("Recipes folder does not exist");
 		}
 		
-		recipes = recipes.toLowerCase();
-		
-		for(int i = 0; i < recipes.length(); i++)
+		for(int j = 0; j < lines.size(); j++)
 		{
-			char curChar = recipes.charAt(i);
-			if(curChar == '\n' || curChar == ' ')
-			{
-				String firstHalf = recipes.substring(0, i);
-				String secondHalf = recipes.substring(i + 1, recipes.length());
-				recipes = firstHalf + secondHalf;
-				i--;
-			}
+			String curLine = lines.get(j);
+			String newLine = removedSpaces(curLine);
+			lines.remove(j);
+			lines.add(j, newLine);
+		}
+		
+		for(int i = 0; i < lines.size(); i++)
+		{
+			String ing1 = getActualString(0, lines.get(i));
+			String ing2 = getActualString(1, lines.get(i));
+			String result = getActualString(2, lines.get(i));
+			new Recipe(ing1, ing2, result);
+		}
+		
+		for(int i = 0; i < Recipe.listLength(); i++)
+		{
+			System.out.println(Recipe.getRecipe(i));
 		}
 	}
 	
 	public int getMixId(int id1, int id2)
 	{
 		Recipe tempRecipe = new Recipe(id1, id2);
-		if(tempRecipe.exists())
+		return tempRecipe.getResult();
+	}
+	
+	public static String removedSpaces(String input)
+	{
+		String returnValue = "";
+		for(int i = 0; i < input.length(); i++)
 		{
-			
+			char curChar = input.charAt(i);
+			if(curChar != ' ')
+			{
+				returnValue += curChar; 
+			}
 		}
+		return returnValue;
+	}
+	
+	public static String getActualString(int index, String input)
+	{
+		int weirdCharCount = 0;
+		String returnValue = "";
+		for(int i = 0; i < input.length(); i++)
+		{
+			char curChar = input.charAt(i);
+			if(curChar == '+' || curChar == '=')
+			{
+				weirdCharCount++;
+			}
+			if(weirdCharCount == index)
+			{
+				if(curChar != '+' && curChar != '=')
+				{
+					returnValue += curChar;
+				}
+			}
+		}
+		
+		return returnValue;
 	}
 }
