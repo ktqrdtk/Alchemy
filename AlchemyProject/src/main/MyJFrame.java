@@ -32,6 +32,7 @@ public class MyJFrame extends JFrame implements MouseListener
 	public MyJFrame(String input)
 	{
 		super(input);
+		initRecipes();
 		resizeRun = new TimerTask()
 				{
 					public void run()
@@ -246,7 +247,7 @@ public class MyJFrame extends JFrame implements MouseListener
 		activeItems.add(adderItem);
 	}
 	
-	public int getMixId(int id1, int id2)
+	public void initRecipes()
 	{
 		InputStream in = getClass().getResourceAsStream("/Recipes.txt"); 
 		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
@@ -263,7 +264,28 @@ public class MyJFrame extends JFrame implements MouseListener
 		{
 			System.out.println("Recipes folder does not exist");
 		}
-		System.out.println(recipes);
-		return 4;
+		
+		recipes = recipes.toLowerCase();
+		
+		for(int i = 0; i < recipes.length(); i++)
+		{
+			char curChar = recipes.charAt(i);
+			if(curChar == '\n' || curChar == ' ')
+			{
+				String firstHalf = recipes.substring(0, i);
+				String secondHalf = recipes.substring(i + 1, recipes.length());
+				recipes = firstHalf + secondHalf;
+				i--;
+			}
+		}
+	}
+	
+	public int getMixId(int id1, int id2)
+	{
+		Recipe tempRecipe = new Recipe(id1, id2);
+		if(tempRecipe.exists())
+		{
+			
+		}
 	}
 }
