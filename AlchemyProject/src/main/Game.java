@@ -75,7 +75,7 @@ public class Game
 		frame.setVisible(true);
 		coAd.componentResized(new ComponentEvent(frame.getRootPane(), 101));
 		frame.getGlassPane().setPreferredSize(frame.getSize());
-		Item[] tempArray = {new Item(frame, Pictures.FIRE, true), new Item(frame, Pictures.WATER, true), new Item(frame, Pictures.EARTH, true), new Item(frame, Pictures.AIR, true)};
+		Item[] tempArray = {new Item(frame, Pictures.getId("fire"), true), new Item(frame, Pictures.getId("water"), true), new Item(frame, Pictures.getId("earth"), true), new Item(frame, Pictures.getId("air"), true)};
 		frame.initInventory(lineDistanceMultiplier, lineWidth, leftSideInventory, frame.getGlassPane().getPreferredSize(), tempArray);
 		frame.setCorrectBounds();
 	}

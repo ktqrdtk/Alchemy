@@ -248,7 +248,7 @@ public class MyJFrame extends JFrame implements MouseListener
 	
 	public int getMixId(int id1, int id2)
 	{
-		InputStream in = getClass().getResourceAsStream("/file.txt"); 
+		InputStream in = getClass().getResourceAsStream("/Recipes.txt"); 
 		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 		String recipes = "";
 		String line;
@@ -256,15 +256,14 @@ public class MyJFrame extends JFrame implements MouseListener
 			while((line = reader.readLine()) != null)
 			{
 				recipes += line;
+				recipes += ';';
 			}
 		}
 		catch (IOException e)
 		{
 			System.out.println("Recipes folder does not exist");
 		}
-		
-		char[] recipesArray = recipes.toCharArray();
-		
-		for(int i = 0; i < )
+		System.out.println(recipes);
+		return 4;
 	}
 }

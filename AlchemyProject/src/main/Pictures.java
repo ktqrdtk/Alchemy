@@ -9,6 +9,7 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -16,8 +17,7 @@ import javax.swing.ImageIcon;
 public class Pictures 
 {
 	public static final int ITEM_IMAGE_NUM = 5;
-	public static final int EARTH = 0, FIRE = 1, WATER = 2, AIR = 3, OBSIDIAN = 4;
-	
+	public static HashMap<String, Integer> itemIds;
 	private static String backgroundLocation, earthLocation, fireLocation, waterLocation, airLocation, obsidianLocation;
 	private static final String stringStarter = "Images/";
 	private static Image[] images;
@@ -30,10 +30,21 @@ public class Pictures
 	
 	public static void setUp()
 	{
+		itemIds = new HashMap<String, Integer>(ITEM_IMAGE_NUM);
+		setMapValues(itemIds);
 		contentPaneSize = new Dimension();
 		setLocations();
 		setImages();
 		setOriginalIcons();
+	}
+	
+	public static void setMapValues(HashMap<String, Integer> input)
+	{
+		String[] stringValues = {"water", "earth", "fire", "air", "obsidian"};
+		for(int i = 0; i < stringValues.length; i++)
+		{
+			input.put(stringValues[i], i);
+		}
 	}
 	
 	private static void setLocations()
@@ -148,5 +159,10 @@ public class Pictures
 		{
 			return -1;
 		}
+	}
+	
+	public static int getId(String input)
+	{
+		return itemIds.get(input);
 	}
 }
