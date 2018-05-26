@@ -40,7 +40,7 @@ public class Pictures
 	
 	public static void setMapValues(HashMap<String, Integer> input)
 	{
-		String[] stringValues = {"water", "earth", "fire", "air", "obsidian"};
+		String[] stringValues = {"earth", "fire", "water", "air", "obsidian"};
 		for(int i = 0; i < stringValues.length; i++)
 		{
 			input.put(stringValues[i], i);

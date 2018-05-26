@@ -216,6 +216,7 @@ public class MyJFrame extends JFrame implements MouseListener
 	public void cross(Item item1, Item item2)
 	{
 		int newItemId = getMixId(item1.getId(), item2.getId());
+		System.out.println(item1.getId() + " " + item2.getId() + " " + newItemId);
 		if(newItemId != -1)
 		{
 			Item newItem = new Item(this, newItemId, true);
@@ -262,6 +263,8 @@ public class MyJFrame extends JFrame implements MouseListener
 			{
 				lines.add(line);
 			}
+			in.close();
+			reader.close();
 		}
 		catch (IOException e)
 		{
@@ -281,12 +284,8 @@ public class MyJFrame extends JFrame implements MouseListener
 			String ing1 = getActualString(0, lines.get(i));
 			String ing2 = getActualString(1, lines.get(i));
 			String result = getActualString(2, lines.get(i));
-			new Recipe(ing1, ing2, result);
-		}
-		
-		for(int i = 0; i < Recipe.listLength(); i++)
-		{
-			System.out.println(Recipe.getRecipe(i));
+			Recipe curRec = new Recipe(ing1, ing2, result);
+			System.out.println(curRec);
 		}
 	}
 	

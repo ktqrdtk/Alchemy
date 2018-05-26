@@ -95,4 +95,6 @@ public class Game
 	{
 		g.drawImage(Pictures.getBackgroundIcon().getImage(), 0, 0, contentPane);
 	}
+	
+	
 }

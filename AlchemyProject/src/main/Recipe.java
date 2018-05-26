@@ -65,6 +65,8 @@ public class Recipe
 			return false;
 		}
 		
+		System.out.println("ing1: " + ing1 + "input.ing1: " + input.ing1 + " ing2: " + ing2 + " input.ing2: " + input.ing2);
+		
 		return true;
 	}
 	
