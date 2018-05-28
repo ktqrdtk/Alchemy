@@ -290,7 +290,7 @@ public class MyJFrame extends JFrame implements MouseListener
 			String ing1 = getActualString(0, lines.get(i));
 			String ing2 = getActualString(1, lines.get(i));
 			String result = getActualString(2, lines.get(i));
-			Recipe curRec = new Recipe(ing1, ing2, result);
+			new Recipe(ing1, ing2, result);
 		}
 	}
 	
