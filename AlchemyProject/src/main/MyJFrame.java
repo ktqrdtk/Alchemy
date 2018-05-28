@@ -54,9 +54,16 @@ public class MyJFrame extends JFrame implements MouseListener
 						needsToBeResized = false;
 						if(selectedItem != null)
 						{
-							selectedItem.setLocation(new Point((int)(MouseInfo.getPointerInfo().getLocation().x - (.5 * selectedItem.getActualSize())), (int)(MouseInfo.getPointerInfo().getLocation().y - (.5 * selectedItem.getActualSize()))));
-							revalidate();
-							repaint();
+							try
+							{
+								selectedItem.setLocation(new Point((int)(MouseInfo.getPointerInfo().getLocation().x - (.5 * selectedItem.getActualSize())), (int)(MouseInfo.getPointerInfo().getLocation().y - (.5 * selectedItem.getActualSize()))));
+								revalidate();
+								repaint();
+							}
+							catch(Exception ex)
+							{
+								
+							}
 						}
 					}
 				};
@@ -216,7 +223,6 @@ public class MyJFrame extends JFrame implements MouseListener
 	public void cross(Item item1, Item item2)
 	{
 		int newItemId = getMixId(item1.getId(), item2.getId());
-		System.out.println(item1.getId() + " " + item2.getId() + " " + newItemId);
 		if(newItemId != -1)
 		{
 			Item newItem = new Item(this, newItemId, true);
@@ -285,7 +291,6 @@ public class MyJFrame extends JFrame implements MouseListener
 			String ing2 = getActualString(1, lines.get(i));
 			String result = getActualString(2, lines.get(i));
 			Recipe curRec = new Recipe(ing1, ing2, result);
-			System.out.println(curRec);
 		}
 	}
 	

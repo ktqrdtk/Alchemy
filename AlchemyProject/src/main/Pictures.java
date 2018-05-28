@@ -7,9 +7,19 @@ import java.awt.Container;
 
 import java.awt.Dimension;
 import java.awt.Image;
-import java.io.File;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.URI;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.stream.Stream;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -18,12 +28,12 @@ public class Pictures
 {
 	public static final int ITEM_IMAGE_NUM = 5;
 	public static HashMap<String, Integer> itemIds;
-	private static String backgroundLocation, earthLocation, fireLocation, waterLocation, airLocation, obsidianLocation;
-	private static final String stringStarter = "Images/";
-	private static Image[] images;
+	private static Path[] locations;
+	private static final String stringStarter = "/Images/", backgroundName = "background.png";
+	private static BufferedImage[] images;
 	private static ImageIcon[] originalIcons;
 	public static ImageIcon[] scaledIcons;
-	private static Image backgroundImg;
+	private static BufferedImage backgroundImg;
 	private static ImageIcon backgroundOIcon, backgroundIcon;
 	
 	public static Dimension contentPaneSize;
@@ -31,85 +41,102 @@ public class Pictures
 	public static void setUp()
 	{
 		itemIds = new HashMap<String, Integer>(ITEM_IMAGE_NUM);
-		setMapValues(itemIds);
 		contentPaneSize = new Dimension();
 		setLocations();
 		setImages();
 		setOriginalIcons();
 	}
 	
-	public static void setMapValues(HashMap<String, Integer> input)
-	{
-		String[] stringValues = {"earth", "fire", "water", "air", "obsidian"};
-		for(int i = 0; i < stringValues.length; i++)
-		{
-			input.put(stringValues[i], i);
-		}
-	}
-	
 	private static void setLocations()
 	{
-		backgroundLocation = stringStarter + "background.png";
-		earthLocation = stringStarter + "earth.png";
-		fireLocation = stringStarter + "fire.png";
-		waterLocation = stringStarter + "water.png";
-		airLocation = stringStarter + "air.png";
-		obsidianLocation = stringStarter + "obsidian.png";
+		//this code VVVV, is from: https://stackoverflow.com/a/28057735/9053026
+		try
+		{
+			URI uri = Pictures.class.getResource(stringStarter).toURI();
+	        Path myPath;
+	        if (uri.getScheme().equals("jar"))
+	        {
+	            FileSystem fileSystem = FileSystems.newFileSystem(uri, Collections.<String, Object>emptyMap(), Thread.currentThread().getContextClassLoader());
+	            myPath = fileSystem.getPath(stringStarter);
+	            fileSystem.close();
+	        }
+	        else
+	        {
+	            myPath = Paths.get(uri);
+	        }
+	        Stream<Path> walk = Files.walk(myPath, 1);
+	        ArrayList<Path> tempLocations = new ArrayList<Path>();
+	        for (Iterator<Path> it = walk.iterator(); it.hasNext();)
+	        {
+	        	Path next = it.next();
+	            tempLocations.add(next);
+	        }
+	        walk.close();
+	        tempLocations.remove(0);//removes the folder path
+	        locations = new Path[tempLocations.size() - 1];//-1 for background
+	        boolean before = true;
+	        for(int i = 0; i < tempLocations.size() - 1; i++)
+	        {
+	        	if(before)
+	        	{
+		        	if(!tempLocations.get(i).endsWith(backgroundName))
+		        	{
+		        		locations[i] = tempLocations.get(i);
+		        		itemIds.put(getEnding(locations[i]), i);
+		        	}
+		        	else
+		        	{
+		        		before = false;
+		        		i--;
+		        	}
+	        	}
+	        	else
+	        	{
+	        		locations[i] = tempLocations.get(i + 1);
+	        		itemIds.put(getEnding(locations[i]), i);
+	        	}
+	        }
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+		}
 	}
 	
 	private static void setImages()
 	{
+		ArrayList<BufferedImage> list = new ArrayList<BufferedImage>();
 		try
 		{
-			Image earthImg = ImageIO.read(new File(earthLocation));
-			Image fireImg = ImageIO.read(new File(fireLocation));
-			Image waterImg = ImageIO.read(new File(waterLocation));
-			Image airImg = ImageIO.read(new File(airLocation));
-			Image obsidianImg = ImageIO.read(new File(obsidianLocation));
-			
-			backgroundImg = ImageIO.read(new File(backgroundLocation));
-			
-			Image[] tempArray = {earthImg, fireImg, waterImg, airImg, obsidianImg};
-			images = tempArray;
+			for(int i = 0; i < locations.length; i++)
+			{
+				BufferedImage bi = ImageIO.read(locations[i].toFile());
+				list.add(bi);
+			}
+			backgroundImg = ImageIO.read(Pictures.class.getResource(stringStarter + backgroundName));
 		}
 		catch(IOException ex)
 		{
-			System.out.println("Missing Images");
+			ex.printStackTrace();
 		}
+		images = list.toArray(new BufferedImage[list.size()]);
 	}
 	
 	private static void setOriginalIcons()
 	{
-		ImageIcon earthOIcon = new ImageIcon(images[0]);
-		ImageIcon fireOIcon = new ImageIcon(images[1]);
-		ImageIcon waterOIcon = new ImageIcon(images[2]);
-		ImageIcon airOIcon = new ImageIcon(images[3]);
-		ImageIcon obsidianOIcon = new ImageIcon(images[4]);
+		ArrayList<ImageIcon> oList = new ArrayList<ImageIcon>();
+		ArrayList<ImageIcon> sList = new ArrayList<ImageIcon>();
+		for(int i = 0; i < images.length; i++)
+		{
+			oList.add(new ImageIcon(images[i]));
+			sList.add(new ImageIcon(images[i]));
+		}
 		
 		backgroundOIcon = new ImageIcon(backgroundImg);
-		
-		ImageIcon[] tempOArray = {earthOIcon, fireOIcon, waterOIcon, airOIcon, obsidianOIcon};
-		originalIcons = tempOArray;
-		
-		ImageIcon earthIcon = new ImageIcon(images[0]);
-		ImageIcon fireIcon = new ImageIcon(images[1]);
-		ImageIcon waterIcon = new ImageIcon(images[2]);
-		ImageIcon airIcon = new ImageIcon(images[3]);
-		ImageIcon obsidianIcon = new ImageIcon(images[4]);
-		
 		backgroundIcon = new ImageIcon(backgroundImg);
 		
-		ImageIcon[] tempArray = {earthIcon, fireIcon, waterIcon, airIcon, obsidianIcon};
-		scaledIcons = tempArray;
-		
-		for(int i = 0; i < tempArray.length; i++)
-		{
-			if(!(tempArray[i].getImage().equals(tempOArray[i].getImage())))
-			{
-				System.out.println("Set up my code wrong in picture class. Scaled images initial should = original images");
-				throw new NumberFormatException();
-			}
-		}
+		originalIcons = oList.toArray(new ImageIcon[oList.size()]);
+		scaledIcons = sList.toArray(new ImageIcon[sList.size()]);
 	}
 	
 	public static void setScaledIcons(int _1, int _2)
@@ -164,5 +191,40 @@ public class Pictures
 	public static int getId(String input)
 	{
 		return itemIds.get(input);
+	}
+	
+	public static String getEnding(Path p)
+	{
+		String path = p.toString();
+		int slashCount = 0;
+		for(int i = 0; i < path.length(); i++)
+		{
+			if(path.charAt(i) == '\\')
+			{
+				slashCount++;	
+			}
+		}
+		int curSlashes = 0;
+		String returnValue = "";
+		boolean passedDot = false;
+		for(int i = 0; i < path.length(); i++)
+		{
+			if(path.charAt(i) == '\\')
+			{
+				curSlashes++;
+			}
+			else if(curSlashes == slashCount)
+			{
+				if(path.charAt(i) == '.')
+				{
+					passedDot = true;
+				}
+				else if(!passedDot)
+				{
+					returnValue += path.charAt(i);
+				}
+			}
+		}
+		return returnValue;
 	}
 }
