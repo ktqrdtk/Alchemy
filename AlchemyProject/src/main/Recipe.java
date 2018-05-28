@@ -38,6 +38,7 @@ public class Recipe
 	{
 		if(real)
 		{
+			System.out.println("OOPS");
 			return result;
 		}
 		else
@@ -55,21 +56,23 @@ public class Recipe
 	
 	public boolean ingMatch(Recipe input)
 	{
-		if((ing1 != input.ing1) && (ing1 != input.ing2))
+		if((ing1 == input.ing1) && (ing2 == input.ing2))
+		{
+			return true;
+		}
+		else if((ing1 == input.ing2) && (ing2 == input.ing1))
+		{
+			return true;
+		}
+		else
 		{
 			return false;
 		}
-		
-		if((ing2 != input.ing1) && (ing2 != input.ing2))
-		{
-			return false;
-		}
-		return true;
 	}
 	
 	public String toString()
 	{
-		return ing1 + " + " + ing2 + " = " + result;
+		return Pictures.getInverseId(ing1) + " + " + Pictures.getInverseId(ing2) + " = " + Pictures.getInverseId(result);
 	}
 	
 	public static Recipe getRecipe(int index)
